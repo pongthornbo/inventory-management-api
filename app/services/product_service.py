@@ -1,5 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
+from decimal import Decimal
 
 from app.schemas.product import ProductCreate, ProductUpdate
 from app.models.product import Product
@@ -11,11 +13,31 @@ from app.models.product import Product
 #     {"id": 4, "name": "USB-C Cable", "price": 250, "stock": 20}
 # ]
 
-def get_all_products(db: Session):
-    return db.query(Product).all()
+def get_all_products(
+    db: Session,
+    search: str | None = None,
+    min_price: Decimal | None = None,
+    max_price: Decimal | None = None,
+    low_stock: bool | None = None
+):
+    query = db.query(Product).filter(Product.is_active.is_(True))
+
+    if search:
+        query = query.filter(or_(Product.name.ilike(f"%{search}%"), Product.description.ilike(f"%{search}%")))
+
+    if min_price is not None:
+        query = query.filter(Product.price >= min_price)
+
+    if max_price is not None:
+        query = query.filter(Product.price <= max_price)
+
+    if low_stock is True:
+        query = query.filter(Product.stock <= 5)
+
+    return query.all()
 
 def get_product_by_id(db: Session, product_id: int):
-    product = db.query(Product).filter(Product.id == product_id).first()
+    product = db.query(Product).filter(Product.id == product_id, Product.is_active.is_(True)).first()
 
     if product is None:
         raise HTTPException(
@@ -68,9 +90,11 @@ def update_product(db:Session, product_id: int, product_update: ProductUpdate):
 
     return product
 
-def delete_product(product_id: int):
-    product = get_product_by_id(product_id)
+def delete_product(db: Session, product_id: int):
+    product = get_product_by_id(db, product_id)
 
-    products.remove(product)
-    
+    product.is_active = False
+
+    db.commit()
+
     return None
