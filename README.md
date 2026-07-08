@@ -61,3 +61,63 @@ app/
 │   └── product.py
 └── services/
     └── product_service.py
+```
+
+## How to Run
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/pongthornbo/inventory-management-api.git
+cd inventory-management-api
+```
+
+### 2. Create and activate virtual environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Start PostgreSQL and pgAdmin with Docker
+
+```bash
+docker compose up -d
+```
+
+This will start:
+
+* PostgreSQL on port 5432
+* pgAdmin on port 5050
+
+### 5. Run the FastAPI server
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### 6. Open API documentation
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Database Configuration
+
+The project currently uses PostgreSQL with the following local database URL:
+
+```text
+postgresql://postgres:postgres@localhost:5432/inventory_db
+```
+
+The PostgreSQL database is started using Docker Compose.
+
+## Notes
+
+This project is currently under development as part of my backend learning portfolio. Current features focus on Product Management, including CRUD operations, search, filtering, and soft delete.
