@@ -6,13 +6,6 @@ from decimal import Decimal
 from app.schemas.product import ProductCreate, ProductUpdate
 from app.models.product import Product
 
-# products = [
-#     {"id": 1, "name": "Keyboard", "price": 990, "stock": 10},
-#     {"id": 2, "name": "Mouse", "price": 490, "stock": 0},
-#     {"id": 3, "name": "HDMI Cable", "price": 180, "stock": 15},
-#     {"id": 4, "name": "USB-C Cable", "price": 250, "stock": 20}
-# ]
-
 def get_all_products(
     db: Session,
     search: str | None = None,
