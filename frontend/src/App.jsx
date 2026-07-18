@@ -116,6 +116,36 @@ function App() {
     }
   }
 
+  async function handleUpdateProduct(productId, productData) {
+  setActionErrorMessage('')
+
+  try {
+    const response = await fetch(
+      `http://localhost:8000/products/${productId}`,
+      {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json',},
+        body: JSON.stringify(productData),
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error('Failed to update product')
+    }
+
+    const updatedProduct = await response.json()
+
+    setProducts((currentProducts) => currentProducts.map((product) => product.id === productId ? updatedProduct : product))
+
+    return true
+  } catch (error) {
+    console.error(error)
+    setActionErrorMessage('Failed to update product')
+
+    return false
+  }
+}
+
   return (
     <main>
       <h1>Inventory Management System</h1>
@@ -138,8 +168,14 @@ function App() {
       ) : filterProducts.length > 0 ? (
           <ul>
             {filterProducts.map((product) => (
-                <ProductItem key={product.id} product={product} onUpdateStock={handleUpdateStock} onDelete={handleDeleteProduct}/>
-            ))}
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  onUpdateStock={handleUpdateStock}
+                  onUpdateStock={handleUpdateProduct}
+                  onDelete={handleDeleteProduct}/>
+              ))
+            }
           </ul>
         ) : (
           <p>No products found.</p>

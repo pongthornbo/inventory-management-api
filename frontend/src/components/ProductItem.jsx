@@ -1,4 +1,87 @@
-function ProductItem ({ product, onUpdateStock, onDelete }) {
+import { useState } from "react"
+
+function ProductItem ({ product, onUpdateStock, onUpdateProduct, onDelete }) {
+    const [isEditing, setIsEditing] = useState(false)
+    const [editName, setEditName] = useState(product.name)
+    const [editPrice, setEditPrice] = useState(String(product.price))
+    const [editStock, setEditStock] = useState(String(product.stock))
+
+    function handleStartEdit() {
+        setEditName(product.name)
+        setEditPrice(String(product.price))
+        setEditStock(String(product.stock))
+        setIsEditing(true)
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault()
+
+        const isSuccess = await onUpdateProduct(
+            product.id, {
+                name: editName,
+                price: Number(editPrice),
+                stock: Number(editStock),
+            })
+
+        if (isSuccess) {
+            setIsEditing(false)
+        }
+    }
+
+    if (isEditing) {
+        return (
+            <li>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Name
+                        <input
+                            type="text"
+                            value={editName}
+                            onChange={(event) => {setEditName(event.target.value)}}
+                            required
+                        />
+                    </label>
+
+                    <label>
+                        Price
+                        <input
+                            type="number"
+                            value={editPrice}
+                            onChange={(event) => {setEditPrice(event.target.value)}}
+                            min="0"
+                            step="0.01"
+                            required
+                        />
+                    </label>
+
+                    <label>
+                        Stock
+                        <input
+                            type="number"
+                            value={editStock}
+                            onChange={(event) => {setEditStock(event.target.value)}}
+                            min="0"
+                            required
+                        />
+                    </label>
+
+                    <button type="submit">
+                        Save
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                        setIsEditing(false)
+                        }}
+                    >
+                        Cancel
+                    </button>
+                </form>
+            </li>
+        )
+    }
+
     return (
         <li>
             {product.name} — ฿{product.price} — Stock: {product.stock}
@@ -15,6 +98,13 @@ function ProductItem ({ product, onUpdateStock, onDelete }) {
                 onClick={() => {onUpdateStock(product.id, product.stock + 1)}}
             >
                 +
+            </button>
+
+            <button
+                type="button"
+                onClick={handleStartEdit}
+            >
+                Edit
             </button>
 
             <button type="button" onClick={() => onDelete(product.id)}>Delete</button>
