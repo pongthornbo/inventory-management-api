@@ -176,7 +176,7 @@ function App() {
                   key={product.id}
                   product={product}
                   onUpdateStock={handleUpdateStock}
-                  onUpdateStock={handleUpdateProduct}
+                  onUpdateProduct={handleUpdateProduct}
                   onDelete={handleDeleteProduct}/>
               ))
             }
