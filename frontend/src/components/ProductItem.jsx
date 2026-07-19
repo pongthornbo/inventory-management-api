@@ -5,7 +5,7 @@ function ProductItem ({ product, categories, onUpdateStock, onUpdateProduct, onD
     const [editName, setEditName] = useState(product.name)
     const [editPrice, setEditPrice] = useState(String(product.price))
     const [editStock, setEditStock] = useState(String(product.stock))
-    const [editCategoryId, setEditCategoryId] = useState(product.category_id)
+    const [editCategoryId, setEditCategoryId] = useState(product.category_id === null ? '' : String(product.category_id),)
 
     function handleStartEdit() {
         setEditName(product.name)
@@ -23,7 +23,7 @@ function ProductItem ({ product, categories, onUpdateStock, onUpdateProduct, onD
                 name: editName,
                 price: Number(editPrice),
                 stock: Number(editStock),
-                category_id: Number(editCategoryId)
+                category_id: editCategoryId === '' ? null : Number(editCategoryId)
             })
 
         if (isSuccess) {
