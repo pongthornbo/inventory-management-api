@@ -374,7 +374,7 @@ function App() {
             <CategoryItem
               key={category.id}
               category={category}
-              onUpdateCatogery={handleUpdateCategory}
+              onUpdateCategory={handleUpdateCategory}
               onDeleteCategory={handleDeleteCategory}
             />
           )}
