@@ -83,7 +83,7 @@ function App() {
       price: Number(newProductPrice),
       stock: Number(newProductStock),
       category_id: 
-        Number(newProductCategoryId) === '' ?
+        newProductCategoryId === '' ?
         null :
         Number(newProductCategoryId)
     }
