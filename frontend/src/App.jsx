@@ -246,6 +246,7 @@ function App() {
                   <ProductItem
                     key={product.id}
                     product={product}
+                    categories={categories}
                     onUpdateStock={handleUpdateStock}
                     onUpdateProduct={handleUpdateProduct}
                     onDelete={handleDeleteProduct}

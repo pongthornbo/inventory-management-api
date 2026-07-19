@@ -1,10 +1,11 @@
 import { useState } from "react"
 
-function ProductItem ({ product, onUpdateStock, onUpdateProduct, onDelete }) {
+function ProductItem ({ product, categories, onUpdateStock, onUpdateProduct, onDelete }) {
     const [isEditing, setIsEditing] = useState(false)
     const [editName, setEditName] = useState(product.name)
     const [editPrice, setEditPrice] = useState(String(product.price))
     const [editStock, setEditStock] = useState(String(product.stock))
+    const [editCategoryId, setCategoryId] = useState(product.category_id)
 
     function handleStartEdit() {
         setEditName(product.name)
@@ -65,6 +66,20 @@ function ProductItem ({ product, onUpdateStock, onUpdateProduct, onDelete }) {
                         />
                     </label>
 
+                    <label>
+                        CategoryID
+                        <select
+                            value={editCategoryId}
+                            onChange={(event) => {setCategoryId(event.target.value)}}
+                        >
+                            <option value="">
+                                No category
+                            </option>
+
+                            {categories.map((category) => (<option key={category.id} value={category.id}>{category.name}</option>))}
+                        </select>
+                    </label>
+
                     <button type="submit">
                         Save
                     </button>
@@ -84,7 +99,8 @@ function ProductItem ({ product, onUpdateStock, onUpdateProduct, onDelete }) {
 
     return (
         <li>
-            {product.name} — ฿{product.price} — Stock: {product.stock}
+            {product.name} — ฿{product.price} — Stock: {product.stock} 
+            - CategoryName: {categories.find(category => category.id === product.category_id)?.name ?? "No category"}
 
             <button
                 type="button"
